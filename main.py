@@ -17,18 +17,13 @@ def plot_obstacles():
         x, y = poly.exterior.xy
         plt.fill(x, y, 'red', alpha=0.5)
 
-def plot_robot(x, y, orientation, color='blue'):
+def plot_robot(corners, refPt, orientation, color='blue'):
     """Plots the robot with orientation."""
     size = 0.3
-    dx = size * np.cos(np.radians(orientation))
-    dy = size * np.sin(np.radians(orientation))
+    robot_shape = np.array[]
+    for corner in corners:
+        robot_shape = robot_shape.append(corner)
 
-    # Plot the robot as a triangle
-    robot_shape = np.array([
-        [x, y],
-        [x + dx, y + dy],
-        [x - dy, y + dx]
-    ])
     plt.plot(*zip(*np.vstack([robot_shape, robot_shape[0]])), color=color)
 
 def rotate_point(point, angle_deg, pivot=(0, 0)):
