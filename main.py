@@ -31,6 +31,46 @@ def plot_robot(x, y, orientation, color='blue'):
     ])
     plt.plot(*zip(*np.vstack([robot_shape, robot_shape[0]])), color=color)
 
+def rotate_point(point, angle_deg, pivot=(0, 0)):
+    """
+    Rotate a point around a pivot point.
+    
+    :param point: Tuple (x, y) - point to rotate
+    :param angle_deg: float - rotation angle in degrees (counter-clockwise)
+    :param pivot: Tuple (x, y) - pivot point (default: origin)
+    :return: Tuple (x, y) - rotated point coordinates
+    """
+    # Convert angle to radians
+    angle_rad = math.radians(angle_deg)
+    
+    # Translate point to origin
+    x_translated = point[0] - pivot[0]
+    y_translated = point[1] - pivot[1]
+    
+    # Apply rotation matrix
+    cos_theta = math.cos(angle_rad)
+    sin_theta = math.sin(angle_rad)
+    
+    x_rotated = x_translated * cos_theta - y_translated * sin_theta
+    y_rotated = x_translated * sin_theta + y_translated * cos_theta
+    
+    # Translate back to pivot point
+    x_new = x_rotated + pivot[0]
+    y_new = y_rotated + pivot[1]
+    
+    return (round(x_new, 2), round(y_new, 2))
+
+def rotate_object(obj_points, angle_deg, pivot=(0, 0)):
+    """
+    Rotate all points of an object around a pivot point
+    
+    :param obj_points: List of tuples [(x1, y1), (x2, y2)...] - object's points
+    :param angle_deg: float - rotation angle in degrees (counter-clockwise)
+    :param pivot: Tuple (x, y) - pivot point (default: origin)
+    :return: List of tuples - rotated object points
+    """
+    return [rotate_point(point, angle_deg, pivot) for point in obj_points]
+
 def distance(p1, p2):
     """Euclidean distance between two points."""
     return np.linalg.norm(np.array(p1) - np.array(p2))
