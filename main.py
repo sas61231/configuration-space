@@ -20,11 +20,7 @@ def plot_obstacles():
 def plot_robot(corners, refPt, orientation, color='blue'):
     """Plots the robot with orientation."""
     size = 0.3
-    robot_shape = np.array[]
-    for corner in corners:
-        robot_shape = robot_shape.append(corner)
-
-    plt.plot(*zip(*np.vstack([robot_shape, robot_shape[0]])), color=color)
+    plt.plot(*zip(*np.vstack([corners, refPt])), color=color)
 
 def rotate_point(point, angle_deg, pivot=(0, 0)):
     """
