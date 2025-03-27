@@ -20,10 +20,6 @@ def plotObstacles():
 def plotRobot(corners, refPt, orientation, color='blue'):
     """Plots the robot with orientation."""
     size = 0.3
-    
-    # remember to make corners = np.array[]
-    
-
     plt.plot(*zip(*np.vstack([corners, refPt])), color=color)
 
 def rotate_point(point, angle_deg, pivot=(0, 0)):
