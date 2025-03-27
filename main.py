@@ -11,20 +11,20 @@ goal = None
 orientation = 0  # In degrees
 
 # --- Helper Functions ---
-def plot_obstacles():
+def plotObstacles():
     """Plots all obstacles."""
     for poly in obstacles:
         x, y = poly.exterior.xy
         plt.fill(x, y, 'red', alpha=0.5)
 
-def plot_robot(corners, refPt, orientation, color='blue'):
+def plotRobot(corners, refPt, orientation, color='blue'):
     """Plots the robot with orientation."""
     size = 0.3
-    robot_shape = np.array[]
-    for corner in corners:
-        robot_shape = robot_shape.append(corner)
+    
+    # remember to make corners = np.array[]
+    
 
-    plt.plot(*zip(*np.vstack([robot_shape, robot_shape[0]])), color=color)
+    plt.plot(*zip(*np.vstack([corners, refPt])), color=color)
 
 def rotate_point(point, angle_deg, pivot=(0, 0)):
     """
@@ -128,9 +128,9 @@ def on_click(event):
         goal = (event.xdata, event.ydata)
 
     plt.clf()
-    plot_obstacles()
+    plotObstacles()
     if start:
-        plt.scatter(*start, color='green', label='Start')
+        plt.scatter(*start, color='green', label='Stilart')
     if goal:
         plt.scatter(*goal, color='orange', label='Goal')
     plt.legend()
@@ -161,15 +161,15 @@ def main():
         if path:
             plt.figure()
             plt.title("Path Planning")
-            plot_obstacles()
+            plotObstacles()
             plt.plot(*zip(*path), color='blue', label='Path')
             
             # Animate robot along the path
             for i, (x, y) in enumerate(path):
                 plt.clf()
-                plot_obstacles()
+                plotObstacles()
                 plt.plot(*zip(*path), color='blue', label='Path')
-                plot_robot(x, y, orientation)
+                plotRobot(x, y, orientation)
                 plt.legend()
                 plt.pause(0.1)
 
