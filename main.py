@@ -92,15 +92,44 @@ def astar(start, goal):
 
     return []
 
-#look thru chatgpt's suggestions for fixing the plot obstacle function
-def onClick(event): 
-    """Handles mouse clicks for placing obstacles, start, and goal."""
-    global start, goal
 
-    if event.button == 1:  # Left-click: Place obstacle vertex
-        if len(obstacles) == 0 or len(obstacles[-1].exterior.coords) > 3:
-            obstacles.append(Polygon([]))
-        obstacles[-1] = Polygon(list(obstacles[-1].exterior.coords) + [(event.xdata, event.ydata)])
+partialObstaclePoints = []
+eps = 1
+
+
+
+#look thru chatgpt's suggestions for fixing the plot obstacle function
+def onClick(event, makingObs): 
+    """Handles mouse clicks for placing obstacles, start, and goal."""
+    global start, goal, partialObstaclePoints, eps
+
+    if event.button == 1:  # Left-click: Behavior depends on whether an obstacle is being constructed
+
+        # If there is an obstacle currently being constructed...
+        if partialObstaclePoints:
+
+            # append the (x,y)-pair described by the event to partialObstaclePoints 
+            newVert = [event.xdata, event.ydata]
+            partialObstaclePoints.append(newVert)
+
+            initialVert = partialObstaclePoints[0]
+
+            # if the (x,y)-pair is very close to the first pair in partialObstaclePoints,
+            # then construct the object associated to partialObstaclePoints and exit 
+            # "obstacle-creation" mode
+
+            if distance(newVert, initialVert) < eps:
+                newObstacle = partialObstaclePoints
+                obstacles.append(newObstacle)
+                partialObstaclePoints = []
+
+        # Otherwise, enter obstacle creation mode and save the (x,y)-pair from the 
+        # click event as the first vertex of a new obstacle.
+        else: 
+            initialVert = [event.xdata,event.ydata]
+            partialObstaclePoints.append(initialVert)
+
+
     elif event.button == 2:  # Middle-click: Set start point
         start = (event.xdata, event.ydata)
     elif event.button == 3:  # Right-click: Set goal point
@@ -108,6 +137,14 @@ def onClick(event):
 
     plt.clf()
     plotObstacles()
+
+    """
+    TODO: 
+
+    It would be helpful to plot the points in partialObstaclePoints as they're being plotted 
+    so that the user can see what shape they are making.
+    """
+
     if start:
         plt.scatter(*start, color='green', label='Start')
     if goal:
@@ -117,6 +154,7 @@ def onClick(event):
 
 def main():
     global orientation
+
     fig, ax = plt.subplots()
 
     ax.set_xlim(0, 10) # for some reason i have to use underscores for these
